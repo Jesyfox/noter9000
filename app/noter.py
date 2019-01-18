@@ -8,21 +8,6 @@ from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
 
 
-def is_valid_url(url):
-    parts = urlparse.urlparse(url)
-    return parts.scheme in ('http', 'https')
-
-def base36_encode(number):
-    assert number >= 0, 'positive integer required'
-    if number == 0:
-        return '0'
-    base36 = []
-    while number != 0:
-        number, i = divmod(number, 36)
-        base36.append('0123456789abcdefghijklmnopqrstuvwxyz'[i])
-    return ''.join(reversed(base36))
-
-
 class Noter(object):
 
     def __init__(self):
@@ -30,9 +15,8 @@ class Noter(object):
         self.jinja_env = Environment(loader=FileSystemLoader(template_path),
                                      autoescape=True)
         self.url_map = Map([
-            Rule('/', endpoint='new_url'),
-            Rule('/<short_id>', endpoint='follow_short_link'),
-            Rule('/<short_id>+', endpoint='short_link_details')
+            Rule('/', endpoint='my_notes'),
+            Rule('/note', endpoint='new_note')
         ])
 
     def render_template(self, html_template_name, **context):
@@ -42,7 +26,7 @@ class Noter(object):
 
     def dispatch_request(self, request):
         """takes on_(endpoint) attribute from request url"""
-        print('request', request.environ)
+        #print('request', request.environ)
         adapter = self.url_map.bind_to_environ(request.environ)
         try:
             endpoint, values = adapter.match()
@@ -50,17 +34,26 @@ class Noter(object):
         except HTTPException as e:
             return e
 
-    def on_new_url(self, request):
+    def on_new_note(self, request):
         error = None
-        url = ''
+        note = {}
         if request.method == 'POST':
-            url = request.form['url']
-            if not is_valid_url(url):
-                error = 'You are on new_url attribute'
+            note = {'header': request.form['header'],
+                    'description': request.form['description']
+                    }
+
+            print('header:', note)
+            if not note:
+                error = 'you must fill inputs!'
             else:
                 pass
                 #return self.render_template()
-        return self.render_template('new_url.html', error=error, url=url)
+        return self.render_template('new_note.html',
+                                    error=error,
+                                    note=note)
+
+    def on_my_notes(self, request):
+        return self.render_template('my_notes.html')
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)

@@ -25,8 +25,8 @@ class Noter(object):
         return Response(template.render(context), mimetype='text/html')
 
     def dispatch_request(self, request):
-        """takes on_(endpoint) attribute from request url"""
-        #print('request', request.environ)
+        """takes on_(endpoint) attribute from request url
+           returning self.function that matches with on_(endpoint)"""
         adapter = self.url_map.bind_to_environ(request.environ)
         try:
             endpoint, values = adapter.match()
@@ -38,7 +38,7 @@ class Noter(object):
         error = None
         note = {}
         if request.method == 'POST':
-            note = {'header': request.form['header'],
+            note = {'title': request.form['title'],
                     'description': request.form['description']
                     }
 

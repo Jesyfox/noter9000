@@ -6,6 +6,8 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
+import app.db_bridge as db
+from .utils import get_date, correct_
 
 
 class Noter(object):
@@ -39,11 +41,12 @@ class Noter(object):
         note = {}
         if request.method == 'POST':
             note = {'title': request.form['title'],
-                    'description': request.form['description']
+                    'description': request.form['description'],
+                    'date_created': get_date()
                     }
 
             print('header:', note)
-            if not note:
+            if not correct_(note):
                 error = 'you must fill inputs!'
             else:
                 pass
@@ -53,7 +56,9 @@ class Noter(object):
                                     note=note)
 
     def on_my_notes(self, request):
-        return self.render_template('my_notes.html')
+        return self.render_template('my_notes.html',
+                                    notes=[{'test1': '11'},
+                                           {'test2': '22'}])
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)

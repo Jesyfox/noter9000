@@ -7,8 +7,7 @@ class DataBaseHandler:
         self.data_base = None
         self.collection = None
         self.client = pm.MongoClient(kwargs['host'],
-                                     kwargs['port'],
-                                     connect=False)
+                                     kwargs['port'])
         self.make_data_base(kwargs['db_name'])
         self.make_collection(kwargs['col_name'])
 

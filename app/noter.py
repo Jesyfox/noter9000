@@ -22,7 +22,8 @@ class Noter(object):
                                      autoescape=True)
         self.url_map = Map([
             Rule('/', endpoint='my_notes'),
-            Rule('/note', endpoint='new_note')
+            Rule('/note', endpoint='new_note'),
+            Rule('/clear_notes', endpoint='clear_notes')
         ])
 
     def render_template(self, html_template_name, **context):
@@ -54,15 +55,18 @@ class Noter(object):
                 error = 'you must fill inputs!'
             else:
                 self.data_base.new_note(note)
-                #return self.render_template()
+                return redirect('/')
         return self.render_template('new_note.html',
                                     error=error,
                                     note=note)
 
     def on_my_notes(self, request):
         return self.render_template('my_notes.html',
-                                    notes=[{'test1': 'foo'},
-                                           {'test2': 'bar'}])
+                                    notes=self.data_base.get_notes())
+
+    def on_clear_notes(self, request):
+        self.data_base.kill()
+        return redirect('/')
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)

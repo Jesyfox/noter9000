@@ -6,15 +6,17 @@
     <div>
         <h1><a href=/note>New_note</a></h1>
         <h1>Here will be all created notes!</h1>
+        <a href=/clear_notes>clear all</a>
+        <div>
         {% for dict_item in notes %}
             {% for key, value in dict_item.items() %}
                 <div>
-                    <h2>Key: {{key}}</h2>
-                    <h2>Value: {{value}}</h2>
+                    <h4>{{key}} {{value}}</h4>
                 </div>
             {% endfor %}
-        {% endfor %}
 
+        {% endfor %}
+        </div>
     </div>
   </form>
 {% endblock %}

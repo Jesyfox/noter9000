@@ -23,13 +23,8 @@ class DataBaseHandler:
     def get_notes(self):
         return self.collection.find()
 
+    def delete_by_id(self, object_id):
+        self.collection.delete_one({'_id': object_id})
 
-
-
-
-# def new_note(note, db=note_collection):
-#     db.insert_one(note)
-#
-#
-# def get_notes(db=note_collection):
-#     return db.find()
+    def kill(self):
+        self.collection.drop()

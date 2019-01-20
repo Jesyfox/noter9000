@@ -1,0 +1,4 @@
+HOST = '127.0.0.1'
+PORT = 5000
+MONGO_HOST = 'localhost'
+MONGO_PORT = 6379

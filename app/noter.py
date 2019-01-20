@@ -6,13 +6,17 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
-import app.db_bridge as db
 from .utils import get_date, correct_
+from .db_bridge import DataBaseHandler
 
 
 class Noter(object):
 
-    def __init__(self):
+    def __init__(self, host, port):
+        self.data_base = DataBaseHandler(host=host,
+                                         port=port,
+                                         db_name='notes_db',
+                                         col_name='notes')
         template_path = os.path.join(os.path.dirname(__file__), 'templates')
         self.jinja_env = Environment(loader=FileSystemLoader(template_path),
                                      autoescape=True)
@@ -49,7 +53,7 @@ class Noter(object):
             if not correct_(note):
                 error = 'you must fill inputs!'
             else:
-                pass
+                self.data_base.new_note(note)
                 #return self.render_template()
         return self.render_template('new_note.html',
                                     error=error,
@@ -57,8 +61,8 @@ class Noter(object):
 
     def on_my_notes(self, request):
         return self.render_template('my_notes.html',
-                                    notes=[{'test1': '11'},
-                                           {'test2': '22'}])
+                                    notes=[{'test1': 'foo'},
+                                           {'test2': 'bar'}])
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)

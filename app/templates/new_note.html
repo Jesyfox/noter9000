@@ -7,10 +7,12 @@
     {% if error %}
       <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
-    <p>Title:
-      <input type=text name=title value="{{ title }}">
-    <p>Description:
-      <input type=text name=description value="{{ description }}">
-    <input type=submit value="goto">
+    <p>Title:</p>
+      <input class="title" type=text name=title value="{{ title }}">
+    <p>Description:</p>
+      <textarea cols="30" rows="7" name="description" id="description">
+        {{ description }}
+      </textarea>
+    <p><input type=submit value="post"></p>
   </form>
 {% endblock %}

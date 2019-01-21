@@ -9,12 +9,13 @@
         <a href=/clear_notes>clear all</a>
         <div>
         {% for dict_item in notes %}
+            <div class="note">
             {% for key, value in dict_item.items() %}
-                <div>
-                    <h4>{{key}} {{value}}</h4>
-                </div>
-            {% endfor %}
 
+                    <h4>{{key}}: {{value}}</h4>
+
+            {% endfor %}
+            </div>
         {% endfor %}
         </div>
     </div>

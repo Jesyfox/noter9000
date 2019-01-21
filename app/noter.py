@@ -61,8 +61,12 @@ class Noter(object):
                                     note=note)
 
     def on_my_notes(self, request):
-        return self.render_template('my_notes.html',
-                                    notes=self.data_base.get_notes())
+        if request.method == 'GET':
+            notes = self.data_base.get_notes(sort_by='date_created',
+                                             reverse=True)
+
+            return self.render_template('my_notes.html',
+                                        notes=notes)
 
     def on_clear_notes(self, request):
         self.data_base.kill()

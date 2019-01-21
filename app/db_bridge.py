@@ -20,8 +20,15 @@ class DataBaseHandler:
     def new_note(self, note: dict):
         self.collection.insert_one(note)
 
-    def get_notes(self):
-        return self.collection.find()
+    def get_notes(self, sort_by=None, reverse=False):
+        if sort_by:
+            if reverse:
+                sorting = pm.ASCENDING
+            else:
+                sorting = pm.DESCENDING
+            return self.collection.find().sort(sort_by, sorting)
+        else:
+            return self.collection.find()
 
     def delete_by_id(self, object_id):
         self.collection.delete_one({'_id': object_id})

@@ -26,7 +26,7 @@ class DataBaseHandler:
                 sorting = pm.ASCENDING
             else:
                 sorting = pm.DESCENDING
-            return self.collection.find().sort(sort_by, sorting)
+            return self.collection.find({}, {'_id': False}).sort(sort_by, sorting)
         else:
             return self.collection.find()
 

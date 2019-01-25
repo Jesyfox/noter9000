@@ -6,7 +6,7 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
-from .utils import get_date, correct_
+from .utils import get_date, validate
 from .db_bridge import DataBaseHandler
 
 
@@ -51,7 +51,7 @@ class Noter(object):
                     }
 
             print('header:', note)
-            if not correct_(note):
+            if not validate(note):
                 error = 'you must fill inputs!'
             else:
                 self.data_base.new_note(note)

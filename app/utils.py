@@ -5,9 +5,6 @@ def get_date():
     return dt.utcnow()
 
 
-def correct_(note):
-    unallowed_values = ['', ]
-    for value in note.values():
-        if value in unallowed_values:
-            return False
-    return True
+def validate(note):
+    note = [str(n).rstrip() for n in note.values()]
+    return all(note)
